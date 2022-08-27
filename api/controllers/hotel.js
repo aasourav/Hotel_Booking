@@ -24,12 +24,21 @@ const updateHotel = async(req,res)=>{
     }
 }
 
-const findHotel = async(req,res)=>{
+const getHotel = async(req,res)=>{
     try{
-        // const savedHotel = await Hotels.findById(req.params.id)
+        const gethotel = await Hotels.findById(req.params.id)
+        // res.status(200).json(savedHotel);
+        res.status(200).json(gethotel);
+
+    }catch(error){
+        // res.status(500).json(error)
+        next(error)
+    }
+}
+const getHotels = async(req,res)=>{
+    try{
         //find all
         const hotelS = await Hotels.find()
-        // res.status(200).json(savedHotel);
         res.status(200).json(hotelS);
 
     }catch(error){
@@ -51,6 +60,7 @@ const deleteHotel = async(req,res,next)=>{
 module.exports = {
     createHotel,
     deleteHotel,
-    findHotel,
+    getHotel,
+    getHotels,
     updateHotel
 }

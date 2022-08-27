@@ -1,18 +1,20 @@
 const express = require('express');
 const { default: mongoose } = require('mongoose');
-const {createHotel,deleteHotel,findHotel,updateHotel} = require('../controllers/hotel')
+const {createHotel,deleteHotel,getHotel,getHotels,updateHotel} = require('../controllers/hotel')
 const HotelSchema = require('../models/Hotel');
+const { verifyAdmin } = require('../utilis/verifyToken');
 const router = express.Router();
 const Hotels = new mongoose.model("Hotel",HotelSchema)
 
-
 //Create
-router.post('/',createHotel);
+router.post('/',verifyAdmin,createHotel);
 //Update
-router.put('/:id',updateHotel)
+router.put('/:id',verifyAdmin,updateHotel)
 //Read
-router.get('/',findHotel)
+router.get('/',getHotel)
+router.get('/',getHotels)
+
 //Delete
-router.delete('/:id',deleteHotel)
+router.delete('/:id',verifyAdmin,deleteHotel)
 
 module.exports = router;

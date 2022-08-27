@@ -2,6 +2,7 @@ const { default: mongoose } = require("mongoose")
 const UserSchema = require("../models/User")
 const bcrypt = require('bcryptjs')
 const crtError = require('../utilis/error')
+const jwt = require('jsonwebtoken')
 
 const User = new mongoose.model("User",UserSchema)
 
@@ -32,9 +33,18 @@ const login = async(req,res,next)=>{
         const isCorrectPass = await bcrypt.compare(req.body.password, user.password)
         if(!isCorrectPass) return next(crtError(404,"Wrong Password"))
 
+        //json web token;
+        //for generate secrate in linux or windows
+        // openssl rand -base64 32 
+        // run this in your terminal
+
+        const token = jwt.sign({id:user._id,isAdmin:user.isAdmin},process.env.JWT_secret);
+
         const {password,isAdmin, ...otherDetails} = user; 
 
-        res.status(200).send({...otherDetails})
+        res.cookie("access_token",token,{
+            httpOnly: true,
+        }).status(200).send({...otherDetails})
     }catch(err){
         next(err);
     }
@@ -43,5 +53,6 @@ const login = async(req,res,next)=>{
 
 module.exports = {
     register,
-    login
+    login,
+    User
 }

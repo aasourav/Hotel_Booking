@@ -1,6 +1,7 @@
 const express = require('express')
 const env = require('dotenv');
 const { default: mongoose } = require('mongoose');
+const cookie_parser = require('cookie-parser')
 
 const auth = require('./routers/auth');
 const hotels = require('./routers/hotels');
@@ -26,6 +27,7 @@ mongoose.connection.on('connected',()=>{
     console.log("Mondodb Connected!");
 })
 
+app.use(cookie_parser())
 app.use(express.json())
 app.use('/auth',auth)
 app.use('/users',users)
