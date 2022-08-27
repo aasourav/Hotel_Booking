@@ -62,5 +62,6 @@ module.exports = {
     deleteHotel,
     getHotel,
     getHotels,
-    updateHotel
+    updateHotel,
+    Hotels
 }
